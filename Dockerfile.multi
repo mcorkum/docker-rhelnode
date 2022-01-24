@@ -1,0 +1,37 @@
+FROM redhat/ubi8
+
+# Install Node
+RUN dnf module install nodejs:16 -y
+
+# Install PM2 
+RUN npm i -g pm2
+
+# Create app directory
+WORKDIR /opt/node-app
+
+# Copy package.json and package-lock.json
+#COPY package*.json ./
+COPY app.js ./
+
+# Install app dependencies
+#RUN npm install --production
+
+# Copy the dependencies into a minimal Node.js image
+#FROM redhat/ubi8
+
+# Install app dependencies
+#COPY --from=0 /opt/node-app/src/node_modules /opt/node-app/src/node_modules
+#COPY . /opt/node-app/src
+
+# Drop the root user and make the content of /opt/node-app owned by user 1001
+RUN chown -R 1001:0 /opt/node-app && chmod -R ug+rwx /opt/node-app
+
+# Ser user
+USER 1001
+
+ENV NODE_ENV development
+ENV PORT 3000
+EXPOSE 3000
+
+#CMD ["npm", "start"]
+CMD ["node", "app.js"]

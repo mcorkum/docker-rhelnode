@@ -1,0 +1,14 @@
+version: '3'
+
+services:
+  rhelnode:
+    build:
+      context: ./
+    container_name: rhelnode
+    ports:
+      - '3000:3000'
+    restart: always
+
+networks:
+  default:
+    name: rhel-node
